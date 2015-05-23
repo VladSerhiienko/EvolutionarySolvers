@@ -73,6 +73,12 @@
             An ITaskExecutor's implementation that executes the tasks in a linear fashion.
             </summary>
         </member>
+        <member name="M:GeneticSharp.Infrastructure.Framework.Threading.LinearTaskExecutor.Start">
+            <summary>
+            Starts the tasks execution.
+            </summary>
+            <returns>If has reach the timeout false, otherwise true.</returns>
+        </member>
         <member name="T:GeneticSharp.Infrastructure.Framework.Threading.TaskExecutorBase">
             <summary>
             Task executor base.
@@ -82,6 +88,24 @@
             <summary>
             Initializes a new instance of the <see cref="T:GeneticSharp.Infrastructure.Framework.Threading.TaskExecutorBase"/> class.
             </summary>
+        </member>
+        <member name="P:GeneticSharp.Infrastructure.Framework.Threading.TaskExecutorBase.Tasks">
+            <summary>
+            Gets the tasks.
+            </summary>
+        </member>
+        <member name="P:GeneticSharp.Infrastructure.Framework.Threading.TaskExecutorBase.StopRequested">
+            <summary>
+            Gets a value indicating whether this
+            <see cref="T:GeneticSharp.Infrastructure.Framework.Threading.TaskExecutorBase"/> stop requested.
+            </summary>
+            <value><c>true</c> if stop requested; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:GeneticSharp.Infrastructure.Framework.Threading.TaskExecutorBase.Timeout">
+            <summary>
+            Gets or sets the timeout to execute the tasks.
+            </summary>
+            <value>The timeout.</value>
         </member>
         <member name="M:GeneticSharp.Infrastructure.Framework.Threading.TaskExecutorBase.Add(System.Action)">
             <summary>
@@ -104,30 +128,6 @@
             <summary>
             Stops the tasks execution.
             </summary>
-        </member>
-        <member name="P:GeneticSharp.Infrastructure.Framework.Threading.TaskExecutorBase.Tasks">
-            <summary>
-            Gets the tasks.
-            </summary>
-        </member>
-        <member name="P:GeneticSharp.Infrastructure.Framework.Threading.TaskExecutorBase.StopRequested">
-            <summary>
-            Gets a value indicating whether this
-            <see cref="T:GeneticSharp.Infrastructure.Framework.Threading.TaskExecutorBase"/> stop requested.
-            </summary>
-            <value><c>true</c> if stop requested; otherwise, <c>false</c>.</value>
-        </member>
-        <member name="P:GeneticSharp.Infrastructure.Framework.Threading.TaskExecutorBase.Timeout">
-            <summary>
-            Gets or sets the timeout to execute the tasks.
-            </summary>
-            <value>The timeout.</value>
-        </member>
-        <member name="M:GeneticSharp.Infrastructure.Framework.Threading.LinearTaskExecutor.Start">
-            <summary>
-            Starts the tasks execution.
-            </summary>
-            <returns>If has reach the timeout false, otherwise true.</returns>
         </member>
     </members>
 </doc>
