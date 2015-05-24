@@ -55,6 +55,22 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GeneticSharp-master\src\GeneticSharp.Domain\GeneticSharp.Domain.csproj">
+      <Project>{c76dc1ad-fc7e-4168-bd19-101ff84a43f7}</Project>
+      <Name>GeneticSharp.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GeneticSharp-master\src\GeneticSharp.Extensions\GeneticSharp.Extensions.csproj">
+      <Project>{699af592-1e11-4084-b87e-9ac72ed7861b}</Project>
+      <Name>GeneticSharp.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GeneticSharp-master\src\GeneticSharp.Infrastructure.Framework\GeneticSharp.Infrastructure.Framework.csproj">
+      <Project>{1498d792-d02b-4a9e-8afc-24aeba0dee54}</Project>
+      <Name>GeneticSharp.Infrastructure.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GeneticSharp-master\src\GeneticSharp.Infrastructure.Threading\GeneticSharp.Infrastructure.Threading.csproj">
+      <Project>{f7887a7c-89e6-483a-a762-0a8fe6fcd923}</Project>
+      <Name>GeneticSharp.Infrastructure.Threading</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Labworks.Framework\Labworks.Framework.csproj">
       <Project>{5f7cb1ab-210d-4915-8fc6-71ba557f1bc4}</Project>
       <Name>Labworks.Framework</Name>

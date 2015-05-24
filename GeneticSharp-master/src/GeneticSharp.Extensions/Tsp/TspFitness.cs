@@ -125,7 +125,7 @@ namespace GeneticSharp.Extensions.Tsp
 		/// <returns>The distance two cities.</returns>
 		/// <param name="one">One.</param>
 		/// <param name="two">Two.</param>
-		private double CalcDistanceTwoCities(TspCity one, TspCity two)
+		protected virtual double CalcDistanceTwoCities(TspCity one, TspCity two)
 		{
             return Math.Sqrt(Math.Pow(two.X - one.X, 2) + Math.Pow(two.Y - one.Y, 2));
 		}

@@ -9,6 +9,12 @@ using Labworks.Framework;
 using System.Diagnostics;
 using System.IO;
 using System.Collections.Concurrent;
+using GeneticSharp.Domain.Selections;
+using GeneticSharp.Domain.Mutations;
+using GeneticSharp.Domain.Crossovers;
+using GeneticSharp.Domain.Terminations;
+using GeneticSharp.Infrastructure.Threading;
+using GeneticSharp.Extensions.Tsp;
 
 namespace Labworks.ConsoleApp
 {
@@ -248,6 +254,145 @@ namespace Labworks.ConsoleApp
 
     class Program
     {
+        enum Labwork2Case
+        {
+            Case1,
+            Case2
+        }
+
+        static void LaunchLabwork2(Labwork2Case c)
+        {
+            TargetFunction func = new TargetFunctionMax();
+            GeneticSharp.Domain.GeneticAlgorithm ga = null;
+
+            switch (c)
+            {
+                case Labwork2Case.Case1:
+                    {
+                        var selection = new RouletteWheelSelection();
+                        var crossover = new OnePointCrossover();
+                        var mutation = new GaussianMutation();
+                        var fitness = new TargetFunctionFitness();
+                        var population = new GeneticSharp.Domain.Populations.Population(20, 30, new TargetFunctionChromosome(func, func, TargetFunctionType.Min));
+                        ga = new GeneticSharp.Domain.GeneticAlgorithm(population, fitness, selection, crossover, mutation);
+                    }
+                    break;
+                case Labwork2Case.Case2:
+                    {
+                        var selection = new EliteSelection();
+                        var crossover = new UniformCrossover();
+                        var mutation = new TworsMutation();
+                        var fitness = new TargetFunctionFitness();
+                        var population = new GeneticSharp.Domain.Populations.Population(20, 30, new TargetFunctionChromosome(func, func, TargetFunctionType.Max));
+                        ga = new GeneticSharp.Domain.GeneticAlgorithm(population, fitness, selection, crossover, mutation);
+                    }
+                    break;
+            }
+
+            if (ga == null)
+                return;
+
+            ga.MutationProbability = 0.08f;
+            ga.Termination = new FitnessStagnationTermination(10);
+
+            ga.TaskExecutor = new SmartThreadPoolTaskExecutor()
+            {
+                MinThreads = 25,
+                MaxThreads = 50
+            };
+
+            ga.GenerationRan += delegate
+            {
+                Console.CursorLeft = 0;
+                Console.CursorTop = 1;
+
+                var bestChromosome = ga.Population.BestChromosome;
+                var functionChromosome = bestChromosome as TargetFunctionChromosome;
+                var x = functionChromosome.CalculateX(functionChromosome.CalculateN());
+                var y = functionChromosome.CalculateY(x);
+
+                Console.WriteLine("Generations: {0}", ga.Population.GenerationsNumber);
+                Console.WriteLine("Fitness: {0:n4}", bestChromosome.Fitness);
+                Console.WriteLine("XY: {0} {1}", x, y);
+                Console.WriteLine("Time: {0}", ga.TimeEvolving);
+            };
+
+            try
+            {
+                ga.Start();
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine();
+                Console.WriteLine("Error: {0}", ex.Message);
+                Console.ResetColor();
+                Console.ReadKey();
+                return;
+            }
+
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine();
+            Console.WriteLine("Evolved.");
+            Console.ResetColor();
+            Console.ReadKey();
+        }
+
+        static void LaunchLabwork3()
+        {
+            GeneticSharp.Domain.GeneticAlgorithm ga = null;
+
+            var selection = new EliteSelection();
+            var crossover = new CycleCrossover();
+            var mutation = new OnePointMutation();
+            var fitness = new TspSphericalFitness(16, -100, 100, -100, 100);
+            var population = new GeneticSharp.Domain.Populations.Population(20, 30, new TspChromosome(16));
+            ga = new GeneticSharp.Domain.GeneticAlgorithm(population, fitness, selection, crossover, mutation);
+            ga.MutationProbability = 0.08f;
+            ga.Termination = new FitnessStagnationTermination(10);
+
+            ga.TaskExecutor = new SmartThreadPoolTaskExecutor()
+            {
+                MinThreads = 25,
+                MaxThreads = 50
+            };
+
+            ga.GenerationRan += delegate
+            {
+                Console.CursorLeft = 0;
+                Console.CursorTop = 1;
+
+                var bestChromosome = ga.Population.BestChromosome;
+                var tspSolution = bestChromosome as TspChromosome;
+
+                Console.WriteLine("Generations: {0}", ga.Population.GenerationsNumber);
+                Console.WriteLine("Fitness: {0:n4}", bestChromosome.Fitness);
+                Console.WriteLine("Length: {0:n4}", tspSolution.Length);
+                Console.WriteLine("Time: {0}", ga.TimeEvolving);
+            };
+
+            try
+            {
+                ga.Start();
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine();
+                Console.WriteLine("Error: {0}", ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                Console.ResetColor();
+                Console.ReadKey();
+                return;
+            }
+
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine();
+            Console.WriteLine("Evolved.");
+            Console.ResetColor();
+            Console.ReadKey();  
+        }
+
         static void LaunchLabwork4()
         {
             var hooks = new SolverHooks();
@@ -261,7 +406,9 @@ namespace Labworks.ConsoleApp
 
         static void Main(string[] args)
         {
-            LaunchLabwork5();
+            //LaunchLabwork2(Labwork2Case.Case1);
+            //LaunchLabwork2(Labwork2Case.Case2);
+            LaunchLabwork3();
         }
     }
 }
